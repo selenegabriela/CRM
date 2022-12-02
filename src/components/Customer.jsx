@@ -1,6 +1,9 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const Customer = ({customer}) => {
+
+    const navigate = useNavigate()
 
     const { name, company, email, phone, id } = customer
     return (
@@ -15,6 +18,7 @@ const Customer = ({customer}) => {
             </td>
             <td className='p-6 flex gap-3'>
                 <button
+                    onClick={() => navigate(`/customers/${id}/edit`)}
                     type='button'
                     className='text-blue-600 hover:text-blue-700 uppercase font-bold text-xs'
                 >

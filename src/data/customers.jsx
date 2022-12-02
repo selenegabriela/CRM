@@ -6,6 +6,15 @@ export const getCustomers = async() => {
     return result
 }
 
+export const getCustomer = async(id) => {
+
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/${id}`)
+    const result = await response.json()
+
+    return result
+}
+
+
 export const postCustomer = async(data) => {
 
     try {
