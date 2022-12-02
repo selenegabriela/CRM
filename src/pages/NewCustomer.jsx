@@ -1,13 +1,16 @@
 import React from 'react'
 import NewCustomerForm from '../components/NewCustomerForm'
 import Error from '../components/Error'
-import { Form, useActionData, useNavigate } from 'react-router-dom'
+import { Form, redirect, useActionData, useNavigate } from 'react-router-dom'
+import { postCustomer } from '../data/customers'
 
 export const action = async({request}) => {
   const formData = await request.formData();
 
   // Acces formData values:
   const data = Object.fromEntries(formData)
+
+  const emailFormData = formData.get('email')
 
   // Validation
 
@@ -16,9 +19,19 @@ export const action = async({request}) => {
     errors.push('All fields are required')
   }
 
+  let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
+
+  if(!regex.test(emailFormData)) {
+    errors.push('Invalid email')
+  }
+
   if(Object.keys(errors).length){
     return errors
   }
+
+  await postCustomer(data)
+  
+  return redirect('/')
 }
 
 const NewCustomer = () => {
