@@ -1,7 +1,8 @@
 import React from 'react'
-import { Form, useLoaderData } from 'react-router-dom';
+import { Form, useActionData, useLoaderData, useNavigate, redirect } from 'react-router-dom';
 import NewCustomerForm from '../components/NewCustomerForm';
-import { getCustomer } from '../data/customers';
+import { getCustomer, putCustomer } from '../data/customers';
+import Error from '../components/Error';
 
 export const loader = async({params: {id}}) => {
 
@@ -15,15 +16,49 @@ export const loader = async({params: {id}}) => {
     return customer;
 };
 
+export const action = async({request, params: {id}}) => {
+    const formData = await request.formData();
+
+    // Acces formData values:
+    const data = Object.fromEntries(formData)
+  
+    const emailFormData = formData.get('email')
+  
+    // Validation
+  
+    const errors = []
+    if(Object.values(data).includes('')){
+      errors.push('All fields are required')
+    }
+  
+    let regex = new RegExp("([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\"\(\[\]!#-[^-~ \t]|(\\[\t -~]))+\")@([!#-'*+/-9=?A-Z^-~-]+(\.[!#-'*+/-9=?A-Z^-~-]+)*|\[[\t -Z^-~]*])");
+  
+    if(!regex.test(emailFormData)) {
+      errors.push('Invalid email')
+    }
+  
+    if(Object.keys(errors).length){
+      return errors
+    }
+  
+    await putCustomer(id, data)
+    
+    return redirect('/')
+
+}
+
 
 const EditCustomer = () => {
 
+    const navigate = useNavigate();
+
     const customer = useLoaderData();
-    console.log(customer)
+    const errors = useActionData();
+ 
     return (
         <>
-            <h1 className='font-black text-4xl text-blue-900'>New Customer</h1>
-            <p className='mt-3'>Fill up all fields to register a new customer</p>
+            <h1 className='font-black text-4xl text-blue-900'>Edit Customer</h1>
+            <p className='mt-3'>You can modify the data of a customer</p>
     
             <div className='flex justify-end'>
             <button
@@ -36,16 +71,16 @@ const EditCustomer = () => {
     
             <div className='bg-white shadow rounded-md md:w-3/4 mxauto px-5 py-10 mt-20'>
     
-            {/* {errors?.length && errors.map((error, i) => <Error key={i}>{error}</Error>)} */}
+            {errors?.length && errors.map((error, i) => <Error key={i}>{error}</Error>)}
             <Form
                 method='post'
             >
-                <NewCustomerForm />
+                <NewCustomerForm customer={customer}/>
     
                 <input 
                 type="submit"
                 className='mt-5 w-full bg-blue-800 p-3 uppercase font-bold text-white text-lg'
-                value='Register Customer'
+                value='Keep Changes'
                 />
             </Form>
             </div>

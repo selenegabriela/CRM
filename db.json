@@ -1,20 +1,6 @@
 {
   "customers": [
     {
-      "id": 1,
-      "name": "Juan",
-      "phone": 102013313,
-      "email": "juan@juan.com",
-      "company": "Codigo Con Juan"
-    },
-    {
-      "id": 2,
-      "name": "Karen",
-      "phone": 138198313,
-      "email": "karen@juan.com",
-      "company": "Codigo Con Juan"
-    },
-    {
       "id": 3,
       "name": "Josue",
       "phone": 31983913,
@@ -34,14 +20,6 @@
       "phone": 1398198938,
       "email": "pedro@juan.com",
       "company": "Codigo Con Juan"
-    },
-    {
-      "name": "Selene Gabriela Amador Díaz",
-      "company": "Freelance",
-      "email": "sel_nn@hotmail.com",
-      "phone": "5532477093",
-      "notes": "ok",
-      "id": 6
     }
   ]
 }

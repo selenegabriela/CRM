@@ -1,5 +1,12 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, redirect, Form } from 'react-router-dom'
+import { deleteCustomer } from '../data/customers'
+
+export const action = async({params: {id}}) => {
+    await deleteCustomer(id);
+
+    return redirect('/')
+}
 
 const Customer = ({customer}) => {
 
@@ -24,12 +31,22 @@ const Customer = ({customer}) => {
                 >
                     Edit
                 </button>
-                <button
-                    type='button'
-                    className='text-red-600 hover:text-red-700 uppercase font-bold text-xs'
+                <Form
+                    method='post'
+                    action={`/customers/${id}/destroy`}
+                    onSubmit={e => {
+                        if(!confirm('Are you sure?')){
+                            e.preventDefault()
+                        }
+                    }}
                 >
-                    Delete
-                </button>
+                    <button
+                        type='submit'
+                        className='text-red-600 hover:text-red-700 uppercase font-bold text-xs'
+                    >
+                        Delete
+                    </button>
+                </Form>
             </td>
         </tr>
     )
